@@ -15,12 +15,15 @@
     <properties>
         <java.version>11</java.version>
         <spring.boot.version>2.6.3</spring.boot.version>
+
+        <!-- SonarQube properties -->
         <sonar.projectKey>your-key</sonar.projectKey>
         <sonar.host.url>http://localhost:9000</sonar.host.url>
-        <!-- Replace localhost:9000 with your actual SonarQube host if needed -->
+        <!-- Optional: <sonar.login>${env.SONAR_TOKEN}</sonar.login> -->
     </properties>
 
     <dependencies>
+        <!-- Spring Boot Starter Web -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -30,7 +33,7 @@
 
     <build>
         <plugins>
-            <!-- Java compiler plugin -->
+            <!-- Maven Compiler Plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -41,13 +44,13 @@
                 </configuration>
             </plugin>
 
-            <!-- Spring Boot plugin -->
+            <!-- Spring Boot Maven Plugin -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
 
-            <!-- SonarQube plugin -->
+            <!-- SonarQube Scanner Plugin -->
             <plugin>
                 <groupId>org.sonarsource.scanner.maven</groupId>
                 <artifactId>sonar-maven-plugin</artifactId>

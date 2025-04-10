@@ -4,7 +4,7 @@ pipeline {
     environment {
         REGISTRY = "santhosh2010/java_micro"
         IMAGE_TAG = "${env.BRANCH_NAME}-${env.BUILD_NUMBER}"
-        SONARQUBE_ENV = "SonarQube"
+        SONARQUBE_ENV = "SonarQube" // Ensure this matches exactly with Jenkins Sonar config
     }
 
     stages {
@@ -30,7 +30,12 @@ pipeline {
             }
             steps {
                 withSonarQubeEnv("${SONARQUBE_ENV}") {
-                    sh 'mvn sonar:sonar'
+                    sh '''
+                        mvn sonar:sonar \
+                        -Dsonar.projectKey=your-key \
+                        -Dsonar.host.url=http://localhost:9000 \
+                        -Dsonar.login=${SONAR_TOKEN}
+                    '''
                 }
             }
         }
@@ -44,7 +49,7 @@ pipeline {
                 }
             }
             steps {
-                timeout(time: 1, unit: 'MINUTES') {
+                timeout(time: 3, unit: 'MINUTES') {
                     waitForQualityGate abortPipeline: true
                 }
             }

@@ -1,5 +1,6 @@
 pipeline {
     agent any
+
     environment {
         REGISTRY = "santhosh2010/java_micro"
         IMAGE_TAG = "${env.BRANCH_NAME}-${env.BUILD_NUMBER}"
@@ -24,6 +25,7 @@ pipeline {
                 anyOf {
                     branch pattern: "feature/.*", comparator: "REGEXP"
                     branch 'develop'
+                    branch 'main'
                 }
             }
             steps {
@@ -38,6 +40,7 @@ pipeline {
                 anyOf {
                     branch pattern: "feature/.*", comparator: "REGEXP"
                     branch 'develop'
+                    branch 'main'
                 }
             }
             steps {
@@ -49,10 +52,13 @@ pipeline {
 
         stage('Docker Build & Push') {
             when {
-                branch 'develop'
+                anyOf {
+                    branch 'develop'
+                    branch 'main'
+                }
             }
             steps {
-                script {
+                withCredentials([usernamePassword(credentialsId: 'dockerhub_credentials', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
                     sh """
                         docker build -t $REGISTRY:$IMAGE_TAG .
                         echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
@@ -64,7 +70,10 @@ pipeline {
 
         stage('Deploy to Kubernetes') {
             when {
-                branch 'develop'
+                anyOf {
+                    branch 'develop'
+                    branch 'main'
+                }
             }
             steps {
                 sh """

@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        REGISTRY = "santhosh2010demo"
+        REGISTRY = "santhosh2010/java_micro"
         IMAGE_TAG = "${env.BRANCH_NAME}-${env.BUILD_NUMBER}"
         SONARQUBE_ENV = "SonarQube"
     }
